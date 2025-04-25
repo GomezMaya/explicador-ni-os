@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Startup Spark</title>
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Raleway', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-yellow-100 min-h-screen flex items-center justify-center p-6">
+  <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-xl text-center animate__animated animate__fadeInDown">
+    <h1 class="text-3xl font-bold mb-4">Startup Spark</h1>
+    <p class="text-gray-700 mb-6">Escribe un tema y lo explicaremos como si tuvieras 8 años 🤓</p>
+    <input id="topicInput" type="text" placeholder="Escribe tu tema aquí..." class="w-full p-3 rounded-lg mb-4 border-2 border-gray-300 focus:outline-none">
+    <button onclick="explainTopic()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">Explicar</button>
+    <div id="output" class="mt-6 text-left animate__animated hidden"></div>
+  </div>
+
+  <script>
+    const explanations = {
+      "inteligencia artificial": "Imagina que tienes un robot amigo que aprende cosas viendo cómo las haces. Eso es la inteligencia artificial. Es como un cerebro de computadora que puede aprender a hablar, jugar y ayudar, como si fuera una persona, pero hecho con cables y chips.",
+      "internet": "El internet es como una telaraña mágica que conecta todas las computadoras del mundo. Así puedes hablar con personas lejanas, ver videos divertidos o aprender cosas nuevas, todo desde tu casa.",
+      "energía solar": "La energía solar viene del sol. Es como si el sol enviara abrazos de luz que podemos guardar para encender luces, cargar cosas y ayudar al planeta porque no contamina.",
+      "blockchain": "Blockchain es como una libreta mágica donde se anotan cosas importantes, pero nadie puede hacer trampa porque todos la están mirando al mismo tiempo. Se usa mucho para monedas digitales como el Bitcoin."
+    };
+
+    function explainTopic() {
+      const input = document.getElementById('topicInput');
+      const output = document.getElementById('output');
+      const topic = input.value.trim().toLowerCase();
+
+      if (!topic) {
+        output.textContent = "¡Por favor, escribe un tema!";
+        output.className = "mt-6 text-left text-red-600 animate__animated animate__shakeX";
+        output.classList.remove("hidden");
+        return;
+      }
+
+      let explanation = explanations[topic] || generateGenericExplanation(topic);
+
+      output.innerHTML = `<p class='text-gray-800 animate__animated animate__fadeInUp'>${explanation}</p>`;
+      output.className = "mt-6 text-left animate__animated animate__fadeInUp";
+      output.classList.remove("hidden");
+    }
+
+    function generateGenericExplanation(topic) {
+      return `Imagina que quieres aprender sobre <strong>${topic}</strong>. Vamos a explicarlo con palabras fáciles para que lo entiendas como si tuvieras 8 años. Es algo muy interesante que muchas personas usan o estudian, y tiene muchas formas de ayudarnos en la vida.`;
+    }
+  </script>
+</body>
+</html>
