@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivia Escolar</title>
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <style>
+    .option.correct { background-color: #bbf7d0 !important; }
+    .option.incorrect { background-color: #fecaca !important; }
+    .option.disabled { pointer-events: none; opacity: 0.6; }
+  </style>
+</head>
+<body class="bg-blue-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-xl animate__animated animate__fadeIn">
+    <h1 class="text-3xl font-bold text-center mb-4">Trivia Escolar</h1>
+    <div id="question-container" class="text-lg text-gray-900 mb-6 font-semibold"></div>
+    <div id="options-container" class="grid gap-3 mb-6"></div>
+    <button id="next-btn" onclick="nextQuestion()" class="bg-blue-600 text-white py-2 px-4 rounded-full font-semibold hover:bg-blue-700 transition disabled:opacity-50" disabled>Siguiente</button>
+    <div id="result-container" class="mt-8 text-center text-xl font-bold hidden"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "¿Cuál es el planeta más cercano al Sol?",
+        options: ["Venus", "Marte", "Mercurio", "Tierra"],
+        answer: "Mercurio"
+      },
+      {
+        question: "¿Cuántos continentes hay en el mundo?",
+        options: ["5", "6", "7", "4"],
+        answer: "7"
+      },
+      {
+        question: "¿Quién escribió 'Don Quijote de la Mancha'?",
+        options: ["Miguel de Cervantes", "Pablo Neruda", "Gabriel García Márquez", "Mario Vargas Llosa"],
+        answer: "Miguel de Cervantes"
+      },
+      {
+        question: "¿Qué animal es conocido por su memoria?",
+        options: ["Perro", "Elefante", "Gato", "Delfín"],
+        answer: "Elefante"
+      },
+      {
+        question: "¿Cuál es el océano más grande del mundo?",
+        options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
+        answer: "Pacífico"
+      },
+      {
+        question: "¿Qué órgano bombea la sangre por todo el cuerpo?",
+        options: ["Pulmón", "Cerebro", "Corazón", "Riñón"],
+        answer: "Corazón"
+      },
+      {
+        question: "¿Qué gas respiramos que es vital para vivir?",
+        options: ["Oxígeno", "Hidrógeno", "Dióxido de carbono", "Helio"],
+        answer: "Oxígeno"
+      },
+      {
+        question: "¿Cuántos colores hay en el arcoíris?",
+        options: ["5", "6", "7", "8"],
+        answer: "7"
+      },
+      {
+        question: "¿Qué instrumento tiene teclas blancas y negras?",
+        options: ["Violín", "Piano", "Guitarra", "Flauta"],
+        answer: "Piano"
+      },
+      {
+        question: "¿Qué continente es conocido como el más frío?",
+        options: ["Asia", "América", "Antártida", "Europa"],
+        answer: "Antártida"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question-container");
+    const optionsEl = document.getElementById("options-container");
+    const nextBtn = document.getElementById("next-btn");
+    const resultEl = document.getElementById("result-container");
+
+    function loadQuestion() {
+      nextBtn.disabled = true;
+      questionEl.textContent = questions[currentQuestion].question;
+      optionsEl.innerHTML = "";
+      questions[currentQuestion].options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "option bg-white/80 text-gray-800 py-2 px-4 rounded-md hover:bg-white font-medium transition";
+        btn.onclick = () => selectAnswer(btn, option);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(button, selected) {
+      const correct = questions[currentQuestion].answer;
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(btn => {
+        btn.classList.add("disabled");
+        if (btn.textContent === correct) {
+          btn.classList.add("correct");
+        }
+        if (btn.textContent === selected && selected !== correct) {
+          btn.classList.add("incorrect");
+        }
+      });
+      if (selected === correct) {
+        score++;
+      }
+      nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      questionEl.classList.add("hidden");
+      optionsEl.classList.add("hidden");
+      nextBtn.classList.add("hidden");
+      resultEl.classList.remove("hidden");
+      let feedback = "";
+      if (score === 10) {
+        feedback = "¡Increíble! ¡Eres un genio!";
+      } else if (score >= 7) {
+        feedback = "¡Muy bien! Sabes bastante.";
+      } else if (score >= 4) {
+        feedback = "¡Nada mal! Pero puedes mejorar.";
+      } else {
+        feedback = "¡Sigue aprendiendo! Cada día es una oportunidad.";
+      }
+      resultEl.innerHTML = `Obtuviste <strong>${score}</strong> de 10.<br>${feedback}`;
+    }
+
+    // Iniciar
+    loadQuestion();
+  </script>
+</body>
+</html>
